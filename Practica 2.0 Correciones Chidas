@@ -1,0 +1,207 @@
+import random
+
+
+alfabeto=[]
+# DECLARACION DE FUNCIONES
+def lenguajePotencia(nivel,escritura,lenguaje_p,lenguaje_Cont):
+    if nivel>1:
+        for palabra in lenguaje_p:
+            lenguajePotencia(nivel-1,escritura+str(palabra),lenguaje_p,lenguaje_Cont)
+    else:
+        for palabra in lenguaje_p:
+            lenguaje_Cont.append(escritura+str(palabra))
+
+def reverseLen(lenguaje_Re):
+    lenguaje_reverse=[]
+    for palabra in lenguaje_Re:
+        lenguaje_reverse.append(palabra[::-1])
+    return lenguaje_reverse
+
+def rango():
+    limites=input("Ingresa el intervalo:")
+    limiteInferior=limites.split("-")[0]
+    limiteSuperior=limites.split("-")[1]
+    if  (ord(limiteSuperior)-ord(limiteInferior))>=2:
+        for i in range(ord(limiteInferior),ord(limiteSuperior)+1):
+            alfabeto.append(chr(i))
+    elif (ord(limiteSuperior)-ord(limiteInferior))<2:
+        print("alfabeto invalido, debe contener mas de 3 simbolos")
+        rango()
+def extension():
+    n_simbolos=int(input("Ingresa el numero de simbolos que tendra tu alfabeto: "))
+    if n_simbolos>=3:
+        for x in range(n_simbolos):
+            alfabeto.append(input("Simbolo "+str(x+1)+":"))
+    elif n_simbolos<3:
+        print("El alfabeto debe contener almenos 3 simbolos")
+        extension()
+
+# INCISO "A" DEFINCION DEL ALFABETO
+texto = "PRACTICA 2"
+print(texto.center(50, "="))
+print();
+print("A)LEER EL ALFABETO Σ ");
+print("¿Como quieres leer el alfabeto ?\n")
+print("1.-Caracter por caracter")
+print("2.-Por rango\n")
+
+opcion=int(input("Ingresa tu opciòn:"))
+
+if opcion==1:
+    extension()
+elif opcion==2:
+    rango()
+
+# INCISO "B" DEFINICION DE LENGUAJE L1 Y L2
+
+lenguaje_1=[]
+lenguaje_2=[]
+
+print("\nB)CON BASE EN EL ALFABETO Σ GENERAR LOS LENGUAJES L1 & L2\n")
+longitud_1= int(input("\nLongitud de cada palabra del lenguaje 1: "))
+n_lenguaje1=int(input("Numero de palabras del lenguaje 1:"))
+i=0
+while len(lenguaje_1)< n_lenguaje1:
+    
+    palabra=""
+    for j in range(0,longitud_1):
+        rand_numb=random.randint(0,len(alfabeto)-1)
+        palabra+=alfabeto[rand_numb]
+    if not palabra in lenguaje_1:
+        lenguaje_1.append(palabra)
+
+    
+
+longitud_2= int(input("\nlongitud de cada palabra del lenguaje 2: "))
+n_lenguaje2=int(input("Numero de palabras del lenguaje 2:"))
+i=0
+while len(lenguaje_2) < n_lenguaje2:
+    
+
+    palabra=""
+    for j in range(longitud_2):
+        rand_numb=random.randint(0,len(alfabeto)-1)
+        palabra+=alfabeto[rand_numb]
+    if not palabra in lenguaje_2:
+        lenguaje_2.append(palabra)
+print("\nLos lenguajes son son:\n")
+print("L1:  " +str(lenguaje_1))
+print("\nL2:  " +str(lenguaje_2))
+
+print("OPERACIONES CON LOS LENGUAJES")
+
+# INCISO C UNION DE L1 Y L2
+
+lenguaje_lu=[]
+for palabra1 in lenguaje_1:
+    if not palabra1 in lenguaje_lu:
+        lenguaje_lu.append(palabra1)
+for palabra2 in lenguaje_2:
+    if not palabra2 in lenguaje_lu:
+        lenguaje_lu.append(palabra2)
+
+print("C)GENERAR LENGUAJE Lu RESULTADO DE LA UNION DE L1 Y L2")
+print("\nLu:\n"+str(lenguaje_lu))
+
+# INCISO D CONCATENACION DE L1 Y L2
+
+print("D)GENERAR LENGUAJE Lc RESULTADO DE LA CONCATENACION DE L1 Y L2")
+lenguaje_lc=[]
+for palabra1 in lenguaje_1:
+    for palabra2 in lenguaje_2:
+        palabra_C=palabra1+palabra2
+        if not palabra_C in lenguaje_lc:
+            lenguaje_lc.append(palabra_C)
+print("\nLc:\n"+str(lenguaje_lc))
+
+# INCISO E DIFERENCIA DE L1-L2
+
+print("E)GENERAR LENGUAJE LD1 RESULTADO DE LA DIFERENCIA DE L1 Y L2")
+lenguaje_d1=[]
+lenguaje_d1+=lenguaje_1
+
+for palabra2 in lenguaje_2:
+    if palabra2 in lenguaje_d1:
+        lenguaje_d1.remove(palabra2)
+
+print("\nLD1= L1 - L2:\n"+str(lenguaje_d1))
+
+# INCISO E DIFERENCIA DE L2-L1
+print("E)GENERAR LENGUAJE LD1 RESULTADO DE LA DIFERENCIA DE L2 Y L1")
+lenguaje_d2=[]
+lenguaje_d2+=lenguaje_2
+
+for palabra1 in lenguaje_1:
+    if palabra1 in lenguaje_d2:
+        lenguaje_d2.remove(palabra1)
+
+print("\nLD2= L2 - L1:\n"+str(lenguaje_d2))
+
+# INCISO F POTENCIA DE L1 O L2
+
+print("F)GENERAR LENGUAJE Lp RESULATDO DE LA POTENCIA DE L1 O L2")
+print("\n¿De que lenguaje quieres obtener su potencia ?\n")
+print("1.-L1")
+print("2.-L2\n")
+
+opcion1=int(input("ingresa tu opcion:"))
+potencia=int(input("ingresa tu la potencia debe estar entre -5 y 5:"))
+lenguaje_lp=[]
+lenguaje_seleccion= lenguaje_2 if opcion1==2 else lenguaje_1
+
+if potencia!=0:
+    lenguajePotencia(abs(potencia),"",lenguaje_seleccion,lenguaje_lp)
+    print(lenguaje_lp)
+    if potencia<0:
+        lenguaje_lp=reverseLen(lenguaje_lp)
+        print(lenguaje_lp)
+else:
+    print("L={}")
+
+# INCISO G
+
+LApellido=["GOMEZ","CHAVEZ","GARCIA","GONZALEZ","RODRIGUEZ","FERNANDEZ","LOPEZ","MARTINEZ","SANCHEZ","PEREZ","GOMEZ","MARTIN","JIMENEZ","RUIZ","HERNANDEZ","DIAZ","MORENO","ALVAREZ","MUÑOZ","ROMERO","ALONSO","GUTIERREZ","NAVARRO","TORRES","DOMINGUEZ","VAZQUEZ","RAMOS","GIL","RAMIREZ","SERRANO","BLANCO","SUAREZ","MOLINA","MORALES","ORTEGA","DELGADO","CASTRO","ORTIZ","RUBIO","MARIN","SANZ","NUÑEZ","IGLESIAS","MEDINA","GARRIDO","SANTOS","CASTILLO","CORTES","LOZANO","GUERRERO","CANO","PRIETO","MENDEZ","CALVO","CRUZ","GALLEGO","VIDAL","LEON","HERRERA","MARQUEZ","PEÑA","CABRERA","FLORES","CAMPOS","VEGA","DIEZ","FUENTES","CARRASCO","CABALLERO","NIETO","REYES","AGUILAR","PASCUAL","HERRERO","SANTANA","LORENZO","HIDALGO","MONTERO","IBAÑEZ","GIMENEZ","FERRER","DURAN","VICENTE","BENITEZ","MORA","SANTIAGO","ARIAS","VARGAS","CARMONA","CRESPO","ROMAN","PASTOR","SOTO","SAEZ","VELASCO","SOLER","MOYA","ESTEBAN","PARRA","BRAVO","GALLARDO","ROJAS","PARDO","MERINO","FRANCO","ESPINOSA","IZQUIERDO","LARA","RIVAS","SILVA","RIVERA","CASADO","ARROYO","REDONDO","CAMACHO","REY","VERA","OTERO","LUQUE","GALAN","MONTES","RIOS","SIERRA","SEGURA","CARRILLO","MARCOS","MARTI","SORIANO","MENDOZA","ROBLES","BERNAL","VILA","VALERO","PALACIOS","EXPOSITO","BENITO","ANDRES","VARELA","PEREIRA","MACIAS","GUERRA","HEREDIA","BUENO","ROLDAN","MATEO","VILLAR","CONTRERAS","MIRANDA","GUILLEN","MATEOS","ESCUDERO","AGUILERA","MENENDEZ","CASAS","APARICIO","RIVERO","ESTEVEZ","BELTRAN","PADILLA","GRACIA","RICO","CALDERON","ABAD","GALVEZ","CONDE","SALAS","JURADO","QUINTANA","PLAZA","ACOSTA","ARANDA","BLAZQUEZ","ROCA","BERMUDEZ","COSTA","MIGUEL","SANTAMARIA","SALAZAR","GUZMAN","SERRA","VILLANUEVA","CUESTA","MANZANO","TOMAS","HURTADO","TRUJILLO","RUEDA","PACHECO","AVILA","SIMON","PONS","LAZARO","SANCHO","MESA","ESCOBAR","MILLAN","BLASCO","ALARCON","LUNA","CASTAÑO","ZAMORA","SALVADOR","BERMEJO","PAREDES","ANTON","BALLESTEROS","VALVERDE","MALDONADO","BAUTISTA","VALLE","PONCE","RODRIGO","LORENTE","OLIVA","JUAN","CORDERO","COLLADO","MURILLO","POZO","CUENCA","MONTOYA","MARTOS","CUEVAS","MARCO","BARROSO","QUESADA","BARRERA","ORDOÑEZ","GIMENO","CORRAL","ALBA","PUIG","CABELLO","PULIDO","ROJO","NAVAS","SAIZ","SORIA","ARENAS","AGUADO","DOMINGO","GALINDO","VALLEJO","MENA","ESCRIBANO","ASENSIO","RAMON","VALENCIA","LUCAS","CARO","POLO","AGUIRRE","NARANJO","MATA","VILLALBA","REINA","PAZ","AMADOR","MORAN","LINARES","OJEDA","LEAL","BURGOS","CHEN","OLIVER","CARRETERO","BONILLA","SOSA","ROIG","ARAGON","CARRION","CLEMENTE","VILLA","CASTELLANO","CARRERA","HERNANDO","CORDOBA","ROSA","ANDREU","CACERES","CALERO","CORREA","MOHAMED","COBO","CARDENAS","FERREIRA","ALCARAZ","JUAREZ","VELAZQUEZ","DOMENECH","SOLA","RIERA","SAAVEDRA","TOLEDO","LLORENTE","ZAPATA","MORAL","VELA","SALGADO","CARBONELL","VILLEGAS","ARRIBAS","PRADO","ALFONSO","REQUENA","AYALA","PELAEZ","SEVILLA","FONT","BARRIOS","LUIS","CARBALLO","PIÑEIRO","OLIVARES","ESTEVE","MARQUES","SOLIS","PINTO","CAMARA","GRAU","QUINTERO","SALINAS","BOSCH","PEREA"]
+
+LClaves=["AS","BC","BS","CC","CL","CM","CS","CH","DF","DG","GT","GR","HG","JC","MC","MN","MS","NT","NL","OC","PL","QT","QR","SP","SL","SR","TC","TS","TL","VZ","YN","ZS"]
+
+LnombreH=["SANTIAGO","MATEO","JESÚS","JUAN","JOSÉ","MIGUEL ÁNGEL","FRANCISCO","ALEJANDRO","ANTONIO","JOSÉ LUIS","DANIEL","PEDRO","LEONARDO","MANUEL","DIEGO","SEBASTIÁN","FERNANDO","CARLOS","ÁNGEL","DAVID","EMILIANO","EDUARDO","ROBERTO","RAFAEL","JORGE","MIGUEL","ALEXANDER","RICARDO","LUIS","JUAN CARLOS","JAVIER","LUIS ÁNGEL","ENRIQUE","RAÚL","JOSÉ MANUEL","GABRIEL","JUAN PABLO","EMMANUEL","ALBERTO","MARIO","JOSÉ ÁNGEL","SALVADOR","ARTURO","MATÍAS","ANDRÉS","JOSE ANTONIO","RODRIGO","MAXIMILIANO","MARTÍN","GAEL","ALFREDO","PABLO","GUILLERMO","GERARDO","MARCO ANTONIO","FRANCISCO JAVIER","JONATHAN","ALEXIS","ARMANDO","SERGIO","IKER","FELIPE","SAMUEL","JUAN MANUEL","KEVIN","ADRIÁN","MAURICIO","OSCAR","ALFONSO","NICOLÁS","VÍCTOR MANUEL","AXEL","AGUSTÍN","RAMÓN","ÁNGEL GABRIEL","LUIS FERNANDO","ISAAC","HÉCTOR","ALAN","JUAN JOSÉ","RUBÉN","IGNACIO","CRISTIAN","JOSÉ DE JESÚS","LEONEL","EMILIO","JOSUE","GUSTAVO","ESTEBAN","ABRAHAM","ISMAEL","JOSÉ MIGUEL","BRAYAN","VICENTE","VÍCTOR","ERNESTO","JULIO CÉSAR","ISRAEL","ELIAS","JOSÉ GUADALUPE"]
+
+LnombreM=["XIMENA","SOFIA","GUADALUPE","MARÍA","MARÍA GUADALUPE","MARÍA JOSE","VALENTINA","MARÍA FERNANDA","JUANA","CAMILA","VALERIA","REGINA","VICTORIA","MARGARITA","DANIELA","MARÍA DEL CARMEN","RENATA","ANDREA","NATALIA","ALEXA","JOSEFINA","ROSA","ELIZABETH","FRANCISCA","ALICIA","CARMEN","FERNANDA","ALEJANDRA","TERESA","MARÍA ELENA","ISABEL","MARÍA LUISA","ISABELLA","LUCÍA","ANA MARIA","MARIANA","GLORIA","MARÍA DE JESÚS","ROMINA","ANA SOFÍA","ESMERALDA","MARTHA","VANESSA","ROSA MARÍA","ESPERANZA","ALINA","MARÍA TERESA","ANGELA","MARIA DE LOS ÁNGELES","GABRIELA","ABIGAIL","SAMANTHA","SARA","MELISSA","CATALINA","DULCE MARÍA","JULIA","CAROLINA","ALONDRA","YOLANDA","JIMENA","FÁTIMA","ELENA","MARÍA DE LA LUZ","CONCEPCIÓN","MARÍA ISABEL","PAULINA","PAULA","MONSERRAT","ESTEFANÍA","VERÓNICA","ADRIANA","KIMBERLY","VIRGINIA","CECILIA","PETRA","SILVIA","LETICIA","GRACIELA","AURORA","EMILY","CELIA","PATRICIA","ESTHER","CRISTINA","LUZ MARÍA","YAMILETH","MARISOL","EVELYN","REBECA","RAQUEL","ANGÉLICA","SUSANA","IRMA","MIRANDA","MANUELA","DOLORES","ANA VICTORIA","JENNIFER","MARÍA DEL ROSARIO"]
+
+Lmeses=["01","02","03","04","05","06","07","08","09","10","11","12"]
+
+rand_sex=random.randint(0,1)
+nombre_index=random.randint(0,len(LnombreM)-1 if rand_sex==1 else len(LnombreH)-1)
+rand_nom=LnombreM[nombre_index]if rand_sex==1 else LnombreH[nombre_index]
+apellidop_index=random.randint(0,len(LApellido)-1)
+apellidom_index=random.randint(0,len(LApellido)-1)
+rand_AP=LApellido[apellidop_index]
+rand_AM=LApellido[apellidom_index]
+clave_index=random.randint(0,len(LClaves)-1)
+rand_entidadF=LClaves[clave_index]
+mes_index=random.randint(0,11)
+rand_mes=Lmeses[mes_index]
+rand_dia=random.randint(1,30)
+rand_año=random.randint(1950,2020)
+
+print("\nOBTENDREMOS EL CURP DE:")
+print("\nNOMBRE: "+ rand_nom+" " + rand_AP+" "+ rand_AM)
+print("FECHA DE NACIMIENTO: "+ str(rand_dia)+" / " + str(rand_mes)+" / "+ str(rand_año))
+sex=""
+if rand_sex==1:
+    sex="M"
+    print("SEXO: M ")
+else:
+    sex="H"
+    print("SEXO: H ")
+
+p1= re.search("(a|e|i|o|u|A|E|I|O|U){1}",rand_AP) 
+p2= re.findall("[^AEIOUaeiou]{1}",rand_AP) 
+
+digitoalei=random.randint(0,9)
+digitoalef=random.randint(0,9)
+CURP=rand_AP[0]+(p1.group())+rand_AM[0]+rand_nom[0]+str(rand_año)[2:4]+rand_mes+str(rand_dia)+sex+rand_entidadF+p2[1]+p3[1]+str(digitoalei)+str(digitoalef)
+
+
+print("CURP: "+CURP)
+
